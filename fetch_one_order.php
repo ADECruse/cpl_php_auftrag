@@ -1,6 +1,24 @@
 <?php
+// Start the session
+session_start();
+$auftrag = $_POST["auftrag"];
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo $auftrag; ?></title>
+</head>
+<body>
     
-    $auftrag = $_POST["auftrag"];
+</body>
+</html>
+
+<?php
+    
+    // $auftrag = $_POST["auftrag"];
  
     $servername = 'db1523.mydbserver.com';
     $username = 'p174834';
@@ -29,7 +47,9 @@
     $connection = null;
 
     //print_r($order);
-
+    // var_dump($_SESSION["orders"]);
+    //echo isset($_SESSION["orders"]);
+    
     echo '
     <form action="update_order.php" method="post">
         <table>
@@ -150,7 +170,7 @@
     echo '   
     </section>
         <section>
-            <button class="">Zurück</button><br>
+            <button class=""><a href="index.php">Zurück</a></button><br>
         </section>
     </section>
     <h2 class="">Adresse:</h2>

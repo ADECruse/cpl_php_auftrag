@@ -305,7 +305,8 @@
         
         
         $connection = null;
-        
+        $_SESSION["orders"] = $rows;
+        // var_dump($_SESSION["orders"]);
         echo "<table>
         <tr>
         <th>Auftrag</th>
