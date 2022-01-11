@@ -10,6 +10,6 @@
 <body>
 
     <?php require 'fetch_all_orders.php';?>
-    
+    <?php require 'fetch_one_order.php'; ?>
 </body>
 </html>

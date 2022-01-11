@@ -309,6 +309,7 @@
         echo "<table>
         <tr>
         <th>Auftrag</th>
+        <th>Kunde</th>
         <th>Status</th>
         <th>Quellmedien</th>
         <th>Zielmedien</th>
@@ -317,7 +318,10 @@
 
         foreach ($rows as $row) {
             echo "<tr>";
-            echo "<td>" . $row['auftrag'] . "<button>View</button>" . "</td>";
+            echo "<td>" . $row['auftrag'] . '<form action="fetch_one_order.php" method="post">
+                <input type="submit" name="auftrag"
+                    value="' . $row['auftrag'] . '"/>
+                </form>' . "</td>";
             echo "<td>" . $row['kunde'] . "</td>";
             echo "<td>" . $row['status'] . "</td>";
             echo "<td>" . $row['quellmedien'] . "</td>";
