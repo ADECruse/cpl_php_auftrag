@@ -49,6 +49,8 @@ $auftrag = $_POST["auftrag"];
     //print_r($order);
     // var_dump($_SESSION["orders"]);
     //echo isset($_SESSION["orders"]);
+
+   
     
     echo '
     <form action="update_order.php" method="post">
@@ -135,6 +137,7 @@ $auftrag = $_POST["auftrag"];
     if ($order["order_status"] == 6) {
         echo '<button class="">Kunde jetzt informieren</button>';
         // Then set status to 7
+        // Then send email
         }
     
     echo '
@@ -142,11 +145,27 @@ $auftrag = $_POST["auftrag"];
     <section class=""> 
         <section>
             <h3>Quellmedien</h3>
-            <div></div>
+            <div>';
+    if(isset($_SESSION["orders"])){
+        foreach($_SESSION["orders"] as $row){
+            if ($row["auftrag"] == $auftrag) {
+                echo $row['quellmedien'];
+            }
+        }
+    }
+    echo '</div>
         </section>
         <section>
             <h3>Zielmedien</h3>
-            <div></div>
+            <div>';
+    if(isset($_SESSION["orders"])){
+        foreach($_SESSION["orders"] as $row){
+            if ($row["auftrag"] == $auftrag) {
+                echo $row['zielmedien'];
+            }
+        }
+    }
+    echo '</div>
         </section>
     </section>
     ';
