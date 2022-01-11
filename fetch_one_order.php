@@ -43,10 +43,19 @@ $auftrag = $_POST["auftrag"];
     catch (PDOException $e) {
         die("ERROR: Could not execute $stmt. " . $e->getMessage());
     }
+    try {
+        $stmt = $connection->prepare("SELECT * FROM `cpl_mediatitles` WHERE ordernumber = ?;");
+        $stmt->execute([$auftrag]);
+        $mediatitles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } 
+    catch (PDOException $e) {
+        die("ERROR: Could not execute $stmt. " . $e->getMessage());
+    }
 
     $connection = null;
 
     //print_r($order);
+    // print_r($mediatitles);
     // var_dump($_SESSION["orders"]);
     //echo isset($_SESSION["orders"]);
 
@@ -208,8 +217,40 @@ $auftrag = $_POST["auftrag"];
         . $order["usr_country"] . '<br>'
         . $order["usr_phone"] . '<br>' . $order["usr_email"] .
         '</address>
-    </section> '
-        
+    </section> ';
+
+    $vhsc = array();     
+    foreach ($mediatitles as $row) {
+        switch ($row["mediatype"]) {
+            case 'vhsc':
+                array_push($vhsc, $row);
+                break;
+        }
+    }
+    echo '
+    <section>
+        <h2 class="">Media Titel:</h2>';
+
+    echo '<table>
+            <caption>VHSc</caption>
+            <thead>
+                <tr>
+                <th>Title Now</th>
+                <th>Title New</th>
+                </tr>
+            </thead>
+            <tbody>';
+    foreach ($vhsc as $title) {
+        echo '<tr>';
+        echo '<td>' . $title["titlenow"] . '</td>';
+        echo '<td>' . $title["titlenew"] . '</td>';
+        echo '</tr>';
+    }            
+    echo ' 
+    </tbody>                 
+        </table>
+    </section>
+    ';
    
  
     
