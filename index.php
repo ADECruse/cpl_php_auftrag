@@ -8,7 +8,7 @@
     <title>Auftrag</title>
 </head>
 <body>
-
+    <?php echo "<h1>Auftrag</h1>"; ?>
     <?php require 'fetch_all_orders.php';?>
     <?php require 'fetch_one_order.php'; ?>
 </body>

@@ -305,7 +305,7 @@
         
         
         $connection = null;
-        echo "<h1>Auftrag</h1>";
+        
         echo "<table>
         <tr>
         <th>Auftrag</th>

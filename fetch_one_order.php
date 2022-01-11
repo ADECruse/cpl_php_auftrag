@@ -1,12 +1,4 @@
 <?php
-    // $contentType = isset($_SERVER["CONTENT_TYPE"]) ? trim($_SERVER["CONTENT_TYPE"]) : '';
-  
-    // if ($contentType === "application/json; charset=UTF-8") {
-
-    //     $content = trim(file_get_contents("php://input"));
-
-    //     $data = json_decode($content, true); 
-    // }
     
     $auftrag = $_POST["auftrag"];
  
@@ -38,55 +30,8 @@
 
     //print_r($order);
 
-    function statusNumberToText($statusnumber)
-    {
-        $status = "";
-        switch ($statusnumber) {
-            case 1:
-                $status = "Warten auf Digitalisierung";
-                break;
-            case 2:
-                $status = "Digitalisierung läuft";
-                break;
-            case 3:
-                $status = "Warten auf Weiterverarbeitung";
-                break;
-            case 4:
-                $status = "Weiterverarbeitung läuft";
-                break;
-            case 5:
-                $status = "Warten auf Druck / Rechnung";
-                break;
-            case 6:
-                $status = "Kunde benachrichtigen";
-                break;
-            case 7:
-                $status = "Warten auf Abholung (Kunde)";
-                break;
-            case 8:
-                $status = "Auftrag verpacken";
-                break;
-            case 9:
-                $status = "Warten auf Versand";
-                break;
-            case 10:
-                $status = "Sonderfall";
-                break;
-            case 11:
-                $status = "Abgeholt vom Kunden";
-                break;
-            case 12:
-                $status = "Versandt";
-                break;               
-            default:
-                $status = "Auftrag angelegt";
-                break;
-        }
-        return $status;
-    }
-
     echo '
-    <form action="" method="post">
+    <form action="update_order.php" method="post">
         <table>
             <tr>
                 <th>Auftrag</th>
@@ -94,43 +39,67 @@
             </tr>
             <tr>
                 <th>Vorname</th>
-                <td>' . 
-                  $order["usr_givenname"] . ' ' .
-                '<br>
-                <input type="text" name="givenname" placeholder="Neuer Vorname"></td>
+                <td>
+                    <input type="text" name="givenname" value="' . $order["usr_givenname"]. '">
+                </td>
             </tr>
             <tr>
                 <th>Nachname</th>
-                <td>' . 
-                  $order["usr_familyname"] . ' ' .
-                '<br>
-                <input type="text" name="familyname" placeholder="Neuer Nachname"></td>
+                <td>
+                    <input type="text" name="familyname" value="' . $order["usr_familyname"] .'">
+                </td>
             </tr>
             <tr>
                 <th>Email</th>
-                <td>' . $order["usr_email"] . '<br>
-                <input type="email" name="email" placeholder="Neue Email Adresse"></td>
+                <td>
+                    <input type="email" name="email" value="' . $order["usr_email"] . '">
                 </td>
             </tr>
             <tr>
                 <th>Status</th>
-                <td> ' . statusNumberToText($order["order_status"]) . '<br>
-                <select>
+                <td>
+                <select name="status">
                 <option disabled value="">Please select one</option>
-                <option value=-1>Auftrag angelegt</option>
-                <option value=1>Warten auf Digitalisierung</option>
-                <option value=2>Digitalisierung läuft</option>
-                <option value=3>Warten auf Weiterverarbeitung</option>
-                <option value=4>Weiterverarbeitung läuft</option>
-                <option value=5>Warten auf Druck / Rechnung</option>
-                <option value=6>Kunde benachrichtigen</option>
-                <option value=7>Warten auf Abholung (Kunde)</option>
-                <option value=8>Auftrag verpacken</option>
-                <option value=9>Warten auf Versand</option>
-                <option value=10>Sonderfall</option>
-                <option value=11>Abgeholt vom Kunden</option>
-                <option value=12>Versandt</option>
-                </select>
+                <option value=-1';
+                echo ($order["order_status"] == -1) ? ' selected' : '';
+                echo '>Auftrag angelegt</option>';
+                echo '<option value=1';
+                echo ($order["order_status"] == 1) ? ' selected' : ''; 
+                echo '>Warten auf Digitalisierung</option>';
+                echo '<option value=2';
+                echo ($order["order_status"] == 2) ? ' selected' : '';
+                echo '>Digitalisierung läuft</option>';
+                echo '<option value=3';
+                echo ($order["order_status"] == 3) ? ' selected' : '';
+                echo '>Warten auf Weiterverarbeitung</option>';
+                echo '<option value=4';
+                echo ($order["order_status"] == 4) ? ' selected' : '';
+                echo '>Weiterverarbeitung läuft</option>';
+                echo '<option value=5';
+                echo ($order["order_status"] == 5) ? ' selected' : '';
+                echo '>Warten auf Druck / Rechnung</option>';
+                echo '<option value=6';
+                echo ($order["order_status"] == 6) ? ' selected' : '';
+                echo '>Kunde benachrichtigen</option>';
+                echo '<option value=7';
+                echo ($order["order_status"] == 7) ? ' selected' : '';
+                echo '>Warten auf Abholung (Kunde)</option>';
+                echo '<option value=8';
+                echo ($order["order_status"] == 8) ? ' selected' : '';
+                echo '>Auftrag verpacken</option>';
+                echo '<option value=9';
+                echo ($order["order_status"] == 9) ? ' selected' : '';
+                echo '>Warten auf Versand</option>';
+                echo '<option value=10';
+                echo ($order["order_status"] == 10) ? ' selected' : '';
+                echo '>Sonderfall</option>';
+                echo '<option value=11';
+                echo ($order["order_status"] == 11) ? ' selected' : '';
+                echo '>Abgeholt vom Kunden</option>';
+                echo '<option value=12'; 
+                echo ($order["order_status"] == 12) ? ' selected' : '';
+                echo '>Versandt</option>';
+            echo '</select>
                 </td>
             </tr>
             <tr>
@@ -138,12 +107,13 @@
                 <td><textarea>...</textarea></td>
             </tr>
         </table>
-        <button class="" type="Submit">Speichern</button><br>
+        <button class="" type="Submit" name="auftrag"
+        value="' . $order["ordernumber"] . '">Speichern</button><br>
     </form>
 
         '; 
-    if ($order.["order_status"] == 6) {
-        echo '<buttonclass="button-primary">Kunde jetzt informieren</button>';
+    if ($order["order_status"] == 6) {
+        echo '<button class="">Kunde jetzt informieren</button>';
         // Then set status to 7
         }
     
