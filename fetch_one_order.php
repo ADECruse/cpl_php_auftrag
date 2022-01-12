@@ -54,6 +54,9 @@
 </head>
 <body>
     <main class="grid-container">
+        <header id="order-header">
+            <h1>Auftrag</h1>
+        </header>
 <?php    
     echo '
     <section id="details-form">
@@ -221,11 +224,11 @@
     $film16mm = array();
     $video8 = array();
     $minidv = array();
+    $micromv = array();
     $betamax = array();
     $video2000 = array();
-    $dia = array();
-    $aps = array();
-    $foto = array();
+    $mc = array();
+    $tonband = array();
     $lp = array();
     $single = array();
 
@@ -258,17 +261,17 @@
             case 'betamax':
                 array_push($betamax, $row);
                 break;
+            case 'micromv':
+                array_push($micromv, $row);
+                break;
+            case 'mc':
+                array_push($mc, $row);
+                break;
+            case 'tonband':
+                array_push($tonband, $row);
+                break;
             case 'video2000':
                 array_push($video2000, $row);
-                break;
-            case 'dias':
-                array_push($dia, $row);
-                break;   
-            case 'aps':
-                array_push($aps, $row);
-                break;
-            case 'foto':
-                array_push($foto, $row);
                 break;
             case 'lp':
                 array_push($lp, $row);
@@ -313,9 +316,9 @@
     createMediaTable($minidv);
     createMediaTable($betamax);
     createMediaTable($video2000);
-    createMediaTable($dia);
-    createMediaTable($aps);
-    createMediaTable($foto);
+    createMediaTable($micromv);
+    createMediaTable($mc);
+    createMediaTable($tonband);
     createMediaTable($lp);
     createMediaTable($single);
 

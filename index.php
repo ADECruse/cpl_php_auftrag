@@ -1,6 +1,6 @@
 <?php
-// Start the session
-session_start();
+    // Start the session
+    session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +13,11 @@ session_start();
     <title>Auftrag</title>
 </head>
 <body>
-    <?php echo "<h1>Auftrag</h1>"; ?>
-    <?php require 'fetch_all_orders.php';?>
+    <main>
+        <header>
+            <h1>Aufträge</h1>
+        </header>
+        <?php require 'fetch_all_orders.php';?>
+    </main>  
 </body>
 </html>

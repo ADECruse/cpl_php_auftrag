@@ -25,7 +25,7 @@
                     kbScratch, kbCleaning, kbRoc, kbRotate, apsResolution,
                     apsScratch, apsRoc, apsRotate, fotoResolution, fotoScratch,
                     fotoRoc, fotoRotate, wishDvd, countDvd, shellDvd, wishCd,
-                    countCd, shellCd, wishData, destMedium FROM cpl_orders;";
+                    countCd, shellCd, wishData, destMedium FROM cpl_orders WHERE order_status >= 1 AND order_status <=10;";
             $result = $connection->query($sql);
             // array that stores data from database query
             $rows = $result->fetchAll(PDO::FETCH_ASSOC);
