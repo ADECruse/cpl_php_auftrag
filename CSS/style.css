@@ -1,0 +1,81 @@
+table#main-table {
+    width: 100%;
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+
+#main-table th {
+    height: auto;
+    padding: 15px;
+    background-color: #0489aa;
+    color: white;
+    text-align: left;
+    border: 1px solid black;
+}
+
+#main-table td {
+    height: 50px;
+    vertical-align: top;
+    text-align: left;
+    padding: 15px;
+    border: 1px solid black;
+  }
+
+.button {
+    background-color: #0489aa;
+    border: 2px solid #0489aa;
+    color: white;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    transition-duration: 0.2s;
+  }
+
+  .button:hover {
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    border: 2px solid #0489aa;
+  }
+/* tr:hover {background-color: yellow;} */
+
+#main-table tr:nth-child(even) {background-color: #f2f2f2;}
+
+/* order view */
+
+.grid-container {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto auto auto auto;
+  }
+
+#details-form {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+#quell {
+    grid-column: 1;
+    grid-row: 3;
+}
+
+#ziel {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+#sonstiges {
+    grid-column: 1;
+    grid-row: 3;
+}
+
+#address {
+    grid-column: 1;
+    grid-row: 4;
+}
+
+#media {
+    grid-column: 1 / span 2;
+    grid-row: 5;
+}

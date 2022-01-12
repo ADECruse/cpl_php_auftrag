@@ -307,7 +307,7 @@
         $connection = null;
         $_SESSION["orders"] = $rows;
         // var_dump($_SESSION["orders"]);
-        echo "<table>
+        echo "<table id='main-table'>
         <tr>
         <th>Auftrag</th>
         <th>Kunde</th>
@@ -319,8 +319,8 @@
 
         foreach ($rows as $row) {
             echo "<tr>";
-            echo "<td>" . $row['auftrag'] . '<form action="fetch_one_order.php" method="post">
-                <input type="submit" name="auftrag"
+            echo '<td><form action="fetch_one_order.php" method="post">
+                <input class="button" type="submit" name="auftrag"
                     value="' . $row['auftrag'] . '"/>
                 </form>' . "</td>";
             echo "<td>" . $row['kunde'] . "</td>";
