@@ -1,6 +1,4 @@
 <?php
-    // Start the session
-    session_start();
     $auftrag = $_POST["auftrag"];
 
     $servername = 'db1523.mydbserver.com';
@@ -18,7 +16,7 @@
         echo "ERROR: Connection failed: " . $e->getMessage();
     }
     try {
-        $stmt = $connection->prepare("SELECT `ordernumber`, `created`, `order_status`, `usr_company`, `usr_givenname`, `usr_familyname`, `usr_street`, `usr_zip`, `usr_city`, `usr_country`, `usr_email`, `usr_phone`, `delivery_company`, `delivery_givenname`, `delivery_familyname`, `delivery_street`, `delivery_zip`, `delivery_city`, `delivery_country`, `comment`, `count8mm`, `count16mm`, `countVhs`, `countVhsc`, `countMinidv`, `countMicromv`, `countVideo8`, `countVideo2000`, `countBetamax`, `countMc`, `countTonband`, `countLp`, `countSingle`, `countDia`, `countKb`, `countAps`, `countFoto`, `countDvd`, `countCd`, `destMedium`, `wishData`, `wishDvd`, `wishCd`, `shellDvd`, `shellCd`, `super8resolution`, `lpCleaning`, `singleCleaning`, `diaResolution`, `diaNumbering`, `diaCleaning`, `diaScratch`, `diaRoc`, `diaRotate`, `diaSlidechange`, `kbResolution`, `kbNumbering`, `kbCleaning`, `kbScratch`, `kbRoc`, `kbRotate`, `apsResolution`, `apsNumbering`, `apsScratch`, `apsRoc`, `apsRotate`, `fotoResolution`, `fotoNumbering`, `fotoRoc`, `fotoRotate`, `fotoScratch`, `confirmedTrash`, '' AS quellmedien, '' AS zielmedien FROM cpl_orders WHERE ordernumber = ?");
+        $stmt = $connection->prepare("SELECT `ordernumber`, `created`, `order_status`, `usr_company`, `usr_givenname`, `usr_familyname`, `usr_street`, `usr_zip`, `usr_city`, `usr_country`, `usr_email`, `usr_phone`, `delivery_company`, `delivery_givenname`, `delivery_familyname`, `delivery_street`, `delivery_zip`, `delivery_city`, `delivery_country`, `usr_comment`, `cpl_comment`, `count8mm`, `count16mm`, `countVhs`, `countVhsc`, `countMinidv`, `countMicromv`, `countVideo8`, `countVideo2000`, `countBetamax`, `countMc`, `countTonband`, `countLp`, `countSingle`, `countDia`, `countKb`, `countAps`, `countFoto`, `countDvd`, `countCd`, `destMedium`, `wishData`, `wishDvd`, `wishCd`, `shellDvd`, `shellCd`, `super8resolution`, `lpCleaning`, `singleCleaning`, `diaResolution`, `diaNumbering`, `diaCleaning`, `diaScratch`, `diaRoc`, `diaRotate`, `diaSlidechange`, `kbResolution`, `kbNumbering`, `kbCleaning`, `kbScratch`, `kbRoc`, `kbRotate`, `apsResolution`, `apsNumbering`, `apsScratch`, `apsRoc`, `apsRotate`, `fotoResolution`, `fotoNumbering`, `fotoRoc`, `fotoRotate`, `fotoScratch`, `confirmedTrash`, '' AS quellmedien, '' AS zielmedien FROM cpl_orders WHERE ordernumber = ?");
         $stmt->execute([$auftrag]);
         $order = $stmt->fetch(PDO::FETCH_ASSOC);
         // echo $auftrag;
@@ -59,15 +57,10 @@
     // code that takes all results from "count" columns and combine them into one named "quellmedien"
     // $orders = [];
     $value = "";
-    // foreach loop modifies the original $order array using references, later I want to change this into an array_map function for speed and simplicity
+    // foreach loop modifies the original $order array using references
     $clean = "Klangverbesserung: Nassreinigung";
-    // foreach ($order as &$row) {
         $order["quellmedien"] = $value;
         foreach ($order as $col => $col_value) {
-            // if ($col == "status") {
-            //     $order["statustext"] = GetStatus($order["status"]);
-            // }
-            
             if (is_numeric($col_value) && $col_value > 0) {
                 switch ($col) {
                     case "count8mm":
@@ -212,20 +205,7 @@
                         break;                
                 }
             }
-            // $getShell = $order["shellDvd"];
-            // if ($getShell == "cardboard") {
-            //     $huelle = "Kartontasche";
-            // } elseif ($getShell == "roundmetal") {
-            //     $huelle = "Metalldose rund";
-            // } elseif ($getShell == "rectmetal") {
-            //     $huelle = "Metallbox eckig";
-            // } else {
-            //     $huelle = "Papierhülle";
-            // }
-            //Hülle: Papierhülle (kostenlos) (shellDvd==paper)
-            //Kartontasche (shellDvd==cardboard)
-            //Metalldose rund (shellDvd==roundmetal)
-            //Metallbox eckig (shellDvd==rectmetal)
+        
             $countDvd = "";
             if ($col == "wishDvd" && $col_value == 1) {
                 if ($order["countDvd"] > 0) {
@@ -262,8 +242,6 @@
                 $order["fotoRotate"], $order["wishDvd"], $order["countDvd"], 
                 $order["shellDvd"], $order["wishCd"], $order["countCd"], $order["shellCd"], 
                 $order["wishData"], $order["destMedium"]);
-        //array_push($orders, $order["auftrag"],$order["kunde"],$order["status"],$order["quellmedien"],$order["zielmedien"],$order["notizen"]);
-    // };
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -356,16 +334,16 @@
                 </tr>
                 <tr>
                     <th>Unsere Notizen</th>
-                    <td><textarea>...</textarea></td>
+                    <td><textarea name="message" rows="10" cols="30">' . $order["cpl_comment"] . '</textarea></td>
                 </tr>
             </table>
-            <button class="" type="Submit" name="auftrag"
-            value="' . $order["ordernumber"] . '"><a href="index.php">Speichern</a></button><br>
+            <button class="button" type="Submit" name="auftrag"
+            value="' . $order["ordernumber"] . '">Speichern</button><br>
         </form>
 
             '; 
         if ($order["order_status"] == 6) {
-            echo '<button class="">Kunde jetzt informieren</button>';
+            echo '<button class="button">Kunde jetzt informieren</button>';
             // Then set status to 7
             // Then send email
             }
@@ -376,26 +354,12 @@
         <section id="quell">
             <h3>Quellmedien</h3>
             <div>';
-    // if(isset($_SESSION["orders"])){
-    //     foreach($_SESSION["orders"] as $row){
-    //         if ($row["auftrag"] == $auftrag) {
-    //             echo $row['quellmedien'];
-    //         }
-    //     }
-    // }
     echo $order["quellmedien"];
     echo '</div>
         </section>
         <section id="ziel">
             <h3>Zielmedien</h3>
             <div>';
-    // if(isset($_SESSION["orders"])){
-    //     foreach($_SESSION["orders"] as $row){
-    //         if ($row["auftrag"] == $auftrag) {
-    //             echo $row['zielmedien'];
-    //         }
-    //     }
-    // }
     echo $order["zielmedien"];
     echo '</div>
         </section>
@@ -421,27 +385,28 @@
     echo '   
         </section>
         <section>
-            <button class=""><a href="index.php">Zurück</a></button><br>
+            <button class="button"><a href="index.php">Zurück</a></button><br>
         </section>
-    </section>
+    </section>';
     
+    /* Code to display customers address */
+    echo '
     <section id="address">
         <h2 class="">Adresse:</h2>  
-        <address>' . 
-        $order["usr_givenname"] . ' ' .
-        $order["usr_familyname"] . '<br>';
-    
-    if ($order["usr_company"] != '') {
+        <address>';
+    echo $order["usr_givenname"] . ' ';
+    echo $order["usr_familyname"] . '<br>'; 
+    if (!empty($order["usr_company"])) {
         echo $order["usr_company"] . '<br>';
     }
-
-    echo       
-        $order["usr_street"] . '<br>'
-        . $order["usr_zip"] . ' ' . $order["usr_city"] . '<br>'
-        . $order["usr_country"] . '<br>'
-        . $order["usr_phone"] . '<br>' . $order["usr_email"] .
+    echo $order["usr_street"] . '<br>';
+    echo $order["usr_zip"] . ' ' . $order["usr_city"] . '<br>';
+    echo $order["usr_country"] . '<br>';
+    echo $order["usr_phone"] . '<br>' . $order["usr_email"] .
         '</address>
     </section> ';
+
+    /* Code to create Media title tables for each mediatype */
 
     $vhs = array();
     $vhsc = array();
@@ -548,48 +513,6 @@
     createMediaTable($single);
 
     echo '</section>';
-/*
-   vhs
-   vhsc
-   8mm
-   16mm
-   video8
-   minidv
-   betamax
-   video2000
-   dia
-   aps
-   foto
-   lp
-   single
-   */
-    // echo '<table>
-    //         <caption>VHSc</caption>
-    //         <thead>
-    //             <tr>
-    //             <th>Title Now</th>
-    //             <th>Title New</th>
-    //             </tr>
-    //         </thead>
-    //         <tbody>';
-    // foreach ($vhsc as $title) {
-    //     echo '<tr>';
-    //     echo '<td>' . $title["titlenow"] . '</td>';
-    //     echo '<td>' . $title["titlenew"] . '</td>';
-    //     echo '</tr>';
-    // }            
-    // echo ' 
-    // </tbody>                 
-    //     </table>
-    // </section>
-    // ';
-
-
-
-   
- 
-    
-    
 ?>
     </main>
 </body>

@@ -16,7 +16,7 @@
             $sql = "SELECT ordernumber AS auftrag, 
                     CONCAT_WS(' ', usr_givenname, usr_familyname) AS kunde, 
                     order_status AS status, '' AS quellmedien, '' AS zielmedien,
-                    comment AS notizen, count8mm, count16mm, countVhs, countVhsc,
+                    usr_comment AS notizen, `cpl_comment`, count8mm, count16mm, countVhs, countVhsc,
                     countVideo8, countMinidv, countMicromv, countVideo2000,
                     countBetamax, countMc, countTonband, countLp, countSingle,
                     countDia, countKb, countAps, countFoto, super8resolution,
@@ -300,7 +300,6 @@
                     $row["fotoRotate"], $row["wishDvd"], $row["countDvd"], 
                     $row["shellDvd"], $row["wishCd"], $row["countCd"], $row["shellCd"], 
                     $row["wishData"], $row["destMedium"]);
-            //array_push($orders, $row["auftrag"],$row["kunde"],$row["status"],$row["quellmedien"],$row["zielmedien"],$row["notizen"]);
         };
         
         
