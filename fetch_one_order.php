@@ -276,7 +276,7 @@
     echo '<div class="row g-2">';
     echo '
     <section id="details-form" class="col">
-        <form  action="update_order.php" method="post">
+        <form  action="index.php" method="post">
             <table class="table table-bordered border w-50">
                 <tr>
                     <th>Auftrag</th>
