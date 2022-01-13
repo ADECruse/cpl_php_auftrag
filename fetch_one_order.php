@@ -18,7 +18,7 @@
         echo "ERROR: Connection failed: " . $e->getMessage();
     }
     try {
-        $stmt = $connection->prepare("SELECT * FROM cpl_orders WHERE ordernumber = ?");
+        $stmt = $connection->prepare("SELECT `ordernumber`, `created`, `order_status`, `usr_company`, `usr_givenname`, `usr_familyname`, `usr_street`, `usr_zip`, `usr_city`, `usr_country`, `usr_email`, `usr_phone`, `delivery_company`, `delivery_givenname`, `delivery_familyname`, `delivery_street`, `delivery_zip`, `delivery_city`, `delivery_country`, `comment`, `count8mm`, `count16mm`, `countVhs`, `countVhsc`, `countMinidv`, `countMicromv`, `countVideo8`, `countVideo2000`, `countBetamax`, `countMc`, `countTonband`, `countLp`, `countSingle`, `countDia`, `countKb`, `countAps`, `countFoto`, `countDvd`, `countCd`, `destMedium`, `wishData`, `wishDvd`, `wishCd`, `shellDvd`, `shellCd`, `super8resolution`, `lpCleaning`, `singleCleaning`, `diaResolution`, `diaNumbering`, `diaCleaning`, `diaScratch`, `diaRoc`, `diaRotate`, `diaSlidechange`, `kbResolution`, `kbNumbering`, `kbCleaning`, `kbScratch`, `kbRoc`, `kbRotate`, `apsResolution`, `apsNumbering`, `apsScratch`, `apsRoc`, `apsRotate`, `fotoResolution`, `fotoNumbering`, `fotoRoc`, `fotoRotate`, `fotoScratch`, `confirmedTrash`, '' AS quellmedien, '' AS zielmedien FROM cpl_orders WHERE ordernumber = ?");
         $stmt->execute([$auftrag]);
         $order = $stmt->fetch(PDO::FETCH_ASSOC);
         // echo $auftrag;
@@ -41,6 +41,229 @@
     // print_r($mediatitles);
     // var_dump($_SESSION["orders"]);
     //echo isset($_SESSION["orders"]);
+
+    function GetShell($arg) {
+        $huelle = "";
+        if ($arg == "cardboard") {
+            $huelle = "Kartontasche";
+        } elseif ($arg == "roundmetal") {
+            $huelle = "Metalldose rund";
+        } elseif ($arg == "rectmetal") {
+            $huelle = "Metallbox eckig";
+        } else {
+            $huelle = "Papierhülle";
+        }
+        return $huelle;
+    }
+
+    // code that takes all results from "count" columns and combine them into one named "quellmedien"
+    // $orders = [];
+    $value = "";
+    // foreach loop modifies the original $order array using references, later I want to change this into an array_map function for speed and simplicity
+    $clean = "Klangverbesserung: Nassreinigung";
+    // foreach ($order as &$row) {
+        $order["quellmedien"] = $value;
+        foreach ($order as $col => $col_value) {
+            // if ($col == "status") {
+            //     $order["statustext"] = GetStatus($order["status"]);
+            // }
+            
+            if (is_numeric($col_value) && $col_value > 0) {
+                switch ($col) {
+                    case "count8mm":
+                        $filmRes = "Art: Premium SD";
+                        if ($order["super8resolution"] == "hd") {
+                            $filmRes = "Art: Deluxe HD";
+                        };
+                        $order["quellmedien"] = $order["quellmedien"] . "<p><b>$col_value" . "x Normal 8 / Super 8 Filme</b></p><p>$filmRes</p>";
+                        break;
+                    case "count16mm":
+                        $order["quellmedien"] = $order["quellmedien"] . "<p><b>$col_value" . "x 16 mm / Super 16 Filme</b></p>";
+                        break;
+                    case "countVhs":
+                        $order["quellmedien"] = $order["quellmedien"] . "<p><b>$col_value" . "x VHS-Kassetten</b></p>";
+                        break;
+                    case "countVhsc":
+                        $order["quellmedien"] = $order["quellmedien"] . "<p><b>$col_value" . "x VHS-C Kassetten</b></p>";
+                        break;
+                    case "countVideo8":
+                        $order["quellmedien"] = $order["quellmedien"] . "<p><b>$col_value" . "x Video8 / Hi8 / Digital8-Kassetten</b></p>";
+                        break; 
+                    case "countMinidv":
+                        $order["quellmedien"] = $order["quellmedien"] . "<p><b>$col_value" . "x Mini-DV / DVCAM-Kassetten</b></p>";
+                        break;
+                    case "countMicromv":
+                        $order["quellmedien"] = $order["quellmedien"] . "<p><b>$col_value" . "x MicroMV-Kassetten</b></p>";
+                        break;
+                    case "countVideo2000":
+                        $order["quellmedien"] = $order["quellmedien"] . "<p><b>$col_value" . "x Video2000-Kassetten</b></p>";
+                        break;
+                    case "countBetamax":
+                        $order["quellmedien"] = $order["quellmedien"] . "<p><b>$col_value" . "x Betamax-Kassetten</b></p>";
+                        break;
+                    case "countMc":
+                        $order["quellmedien"] = $order["quellmedien"] . "<p><b>$col_value" . "x Musik-Kassetten (MC)</b></p>";
+                        break;
+                    case "countTonband":
+                        $order["quellmedien"] = $order["quellmedien"] . "<p><b>$col_value" . "x Tonband</b></p>";
+                        break;
+                    case "countLp":
+                        if ($order["lpCleaning"] == 1) {   
+                            $order["quellmedien"] = $order["quellmedien"] . "<p><b>$col_value" . "x Langspiel-Schallplatte (LP)</b></p><p>$clean</p>";
+                        } else {
+                            $order["quellmedien"] = $order["quellmedien"] . "<p><b>$col_value" . "x Langspiel-Schallplatte (LP)</b></p>";
+                        }
+                        break;
+                    case "countSingle":
+                        if ($order["singleCleaning"] == 1) {   
+                            $order["quellmedien"] = $order["quellmedien"] . "<p><b>$col_value" . "x Single-Schallplatte</b></p><p>$clean</p>";
+                        } else {
+                            $order["quellmedien"] = $order["quellmedien"] . "<p><b>$col_value" . "x Single-Schallplatte</b></p>";
+                        }
+                        break;
+                    case "countDia":
+                        $diaResolution = "";
+                        if ($order["diaResolution"] == "standard") {
+                            $diaResolution = "Standard-Scan 3900 dpi";
+                        } elseif ($order["diaResolution"] == "premium") {
+                            $diaResolution = "Premium 4500 dpi";
+                        } elseif ($order["diaResolution"] == "premium-plus") {
+                            $diaResolution = "Premium-Plus 4500 dpi";
+                        } else {
+                            $diaResolution = "Budget-Scan 2900 dpi";
+                        };
+                    
+                        if ($order["diaScratch"] == 1) {
+                            $diaScratch = "Digitale Staub- und Kratzerentfernung";
+                        };
+                        if ($order["diaCleaning"] == 1) {
+                            $diaCleaning = "Feucht-Intensivreinigung";
+                        };
+                        if ($order["diaRoc"] == 1) {
+                            $diaRoc = "Automatische Farbkorrektur";
+                        };
+                        if ($order["diaRotate"] == 1) {
+                            $diaRotate = "Bilddrehung und Spiegelung";
+                        };
+                        if ($order["diaSlidechange"] == 1) {
+                            $diaSlidechange = "Dias in glaslose Rahmen umrahmen";
+                        };
+                        
+                        $order["quellmedien"] = $order["quellmedien"] . "<p><b>$col_value" . "x Dias</b></p><p>$diaResolution</p><p>$diaScratch</p><p>$diaCleaning</p><p>$diaRoc</p><p>$diaRotate</p><p>$diaSlidechange</p>";
+                        break;
+                    case "countKb":
+                       
+                        if ($order["kbResolution"] == "high") {
+                            $kbResolution = "4500dpi";
+                        } else {
+                            $kbResolution = "2800dpi";
+                        };
+
+                        if ($order["kbScratch"] == 1) {
+                            $kbScratch = "Digitale Staub- und Kratzerentfernung";
+                        };
+                        if ($order["kbCleaning"] == 1) {
+                            $kbCleaning = "Manuelle Staubentfernung";
+                        };
+                        if ($order["kbRoc"] == 1) {
+                            $kbRoc = "Automatische Farbkorrektur";
+                        };
+                        if ($order["kbRotate"] == 1) {
+                            $kbRotate = "Bilddrehung";
+                        };
+
+                        $order["quellmedien"] = $order["quellmedien"] . "<p><b>$col_value" . "x Negative (Kleinbildstreifen)</b></p><p>$kbResolution</p><p>$kbScratch</p><p>$kbCleaning</p><p>$kbRoc</p><p>$kbRotate</p>";
+                        break;
+                    case "countAps":
+                        if ($order["apsResolution"] == "high") {
+                            $apsResolution = "3000dpi";
+                        } else {
+                            $apsResolution = "2000dpi";
+                        };
+
+                        if ($order["apsScratch"] == 1) {
+                            $apsScratch = "Digitale Staub- und Kratzerentfernung";
+                        };
+                        if ($order["apsRoc"] == 1) {
+                            $apsRoc = "Automatische Farbkorrektur";
+                        };
+                        if ($order["apsRotate"] == 1) {
+                            $apsRotate = "Bilddrehung";
+                        };
+                        $order["quellmedien"] = $order["quellmedien"] . "<p><b>$col_value" . "x Bilder auf APS-Rollen</b></p><p>$apsResolution</p><p>$apsScratch</p><p>$apsRoc</p><p>$apsRotate</p>";
+                        break;
+                    case "countFoto":
+                        if ($order["fotoResolution"] == "high") {
+                            $fotoResolution = "600dpi";
+                        } else {
+                            $fotoResolution = "300dpi";
+                        };
+
+                        if ($order["fotoScratch"] == 1) {
+                            $fotoScratch = "Digitale Staub- und Kratzerentfernung";
+                        };
+                        if ($order["fotoRoc"] == 1) {
+                            $fotoRoc = "Automatische Farbkorrektur";
+                        };
+                        if ($order["fotoRotate"] == 1) {
+                            $fotoRotate = "Bilddrehung";
+                        };
+                        $order["quellmedien"] = $order["quellmedien"] . "<p><b>$col_value" . "x Papierfotos</b></p><p>$fotoResolution</p><p>$fotoScratch</p><p>$fotoRoc</p><p>$fotoRotate</p>";
+                        break;                
+                }
+            }
+            // $getShell = $order["shellDvd"];
+            // if ($getShell == "cardboard") {
+            //     $huelle = "Kartontasche";
+            // } elseif ($getShell == "roundmetal") {
+            //     $huelle = "Metalldose rund";
+            // } elseif ($getShell == "rectmetal") {
+            //     $huelle = "Metallbox eckig";
+            // } else {
+            //     $huelle = "Papierhülle";
+            // }
+            //Hülle: Papierhülle (kostenlos) (shellDvd==paper)
+            //Kartontasche (shellDvd==cardboard)
+            //Metalldose rund (shellDvd==roundmetal)
+            //Metallbox eckig (shellDvd==rectmetal)
+            $countDvd = "";
+            if ($col == "wishDvd" && $col_value == 1) {
+                if ($order["countDvd"] > 0) {
+                    $countDvd = "<p>Zusätzliche DVD-Kopien: " . $order['countDvd'] . "</p>";
+                }
+                $order["zielmedien"] = $order["zielmedien"] . "<p><b>Jedes Film/Videomedium auf eine Video-DVD</b></p><p>$countDvd</p><p>Hülle: " . GetShell($order["shellDvd"]) . "</p>";
+            }
+
+            $countCd = "";
+            if ($col == "wishCd" && $col_value == 1) {
+                if ($order["countCd"] > 0) {
+                    $countCd = "<p>Zusätzliche CD-Kopien: " . $order['countCd'] . "</p>";
+                }
+                $order["zielmedien"] = $order["zielmedien"] . "<p><b>Jedes Audiomedium auf eine Audio-CD</b></p><p>$countCd</p><p>Hülle: " . GetShell($order['shellCd']) . "</p>";
+            }
+            $destMedium = $order["destMedium"];
+            if ($col == "wishData" && $col_value == 1) {
+                $order["zielmedien"] = $order["zielmedien"] . "<p><b>Gewünscht: Daten auf $destMedium</b></p>";
+            }
+            
+            // remove columns when no longer necessary
+            if (preg_match("/count/", $col)) {
+                unset($order[$col]);
+            }
+                  
+        }
+        unset($order["super8resolution"], $order["lpCleaning"], $order["singleCleaning"], 
+                $order["diaResolution"], $order["diaScratch"], $order["diaCleaning"], 
+                $order["diaRoc"], $order["diaRotate"], $order["diaSlidechange"], 
+                $order["kbResolution"], $order["kbScratch"], $order["kbCleaning"], 
+                $order["kbRoc"], $order["kbRotate"], $order["apsResolution"], 
+                $order["apsScratch"], $order["apsRoc"], $order["apsRotate"], 
+                $order["fotoResolution"], $order["fotoScratch"], $order["fotoRoc"], 
+                $order["fotoRotate"], $order["wishDvd"], $order["countDvd"], 
+                $order["shellDvd"], $order["wishCd"], $order["countCd"], $order["shellCd"], 
+                $order["wishData"], $order["destMedium"]);
+        //array_push($orders, $order["auftrag"],$order["kunde"],$order["status"],$order["quellmedien"],$order["zielmedien"],$order["notizen"]);
+    // };
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -137,7 +360,7 @@
                 </tr>
             </table>
             <button class="" type="Submit" name="auftrag"
-            value="' . $order["ordernumber"] . '">Speichern</button><br>
+            value="' . $order["ordernumber"] . '"><a href="index.php">Speichern</a></button><br>
         </form>
 
             '; 
@@ -153,25 +376,27 @@
         <section id="quell">
             <h3>Quellmedien</h3>
             <div>';
-    if(isset($_SESSION["orders"])){
-        foreach($_SESSION["orders"] as $row){
-            if ($row["auftrag"] == $auftrag) {
-                echo $row['quellmedien'];
-            }
-        }
-    }
+    // if(isset($_SESSION["orders"])){
+    //     foreach($_SESSION["orders"] as $row){
+    //         if ($row["auftrag"] == $auftrag) {
+    //             echo $row['quellmedien'];
+    //         }
+    //     }
+    // }
+    echo $order["quellmedien"];
     echo '</div>
         </section>
         <section id="ziel">
             <h3>Zielmedien</h3>
             <div>';
-    if(isset($_SESSION["orders"])){
-        foreach($_SESSION["orders"] as $row){
-            if ($row["auftrag"] == $auftrag) {
-                echo $row['zielmedien'];
-            }
-        }
-    }
+    // if(isset($_SESSION["orders"])){
+    //     foreach($_SESSION["orders"] as $row){
+    //         if ($row["auftrag"] == $auftrag) {
+    //             echo $row['zielmedien'];
+    //         }
+    //     }
+    // }
+    echo $order["zielmedien"];
     echo '</div>
         </section>
     ';

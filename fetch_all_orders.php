@@ -103,7 +103,7 @@
             $row["quellmedien"] = $value;
             foreach ($row as $col => $col_value) {
                 if ($col == "status") {
-                    $row["statustext"] = GetStatus($row["status"]);
+                    $row["status"] = GetStatus($row["status"]);
                 }
                 
                 if (is_numeric($col_value) && $col_value > 0) {
@@ -305,7 +305,7 @@
         
         
         $connection = null;
-        $_SESSION["orders"] = $rows;
+        // $_SESSION["orders"] = $rows;
         // var_dump($_SESSION["orders"]);
         echo "<table id='main-table'>
         <tr>
