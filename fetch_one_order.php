@@ -260,21 +260,24 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/style.css"> -->
     <title><?php echo $auftrag; ?></title>
 </head>
 <body>
-    <main class="grid-container">
-        <header id="order-header">
-            <h1>Auftrag</h1>
-        </header>
+    <main class="container-fluid">
+        <div class="row g-2">
+            <header id="order-header" class="col">
+                <h1 class="my-3">Auftrag</h1>
+            </header>
+        </div>
 <?php
-    
+    echo '<div class="row g-2">';
     echo '
-    <section id="details-form">
+    <section id="details-form" class="col">
         <form  action="update_order.php" method="post">
-            <table>
+            <table class="table table-bordered border w-50">
                 <tr>
                     <th>Auftrag</th>
                     <td>' . $order["ordernumber"] . '</td>
@@ -282,25 +285,25 @@
                 <tr>
                     <th>Vorname</th>
                     <td>
-                        <input type="text" name="givenname" value="' . $order["usr_givenname"]. '">
+                        <input class="form-control" type="text" name="givenname" value="' . $order["usr_givenname"]. '">
                     </td>
                 </tr>
                 <tr>
                     <th>Nachname</th>
                     <td>
-                        <input type="text" name="familyname" value="' . $order["usr_familyname"] .'">
+                        <input class="form-control" type="text" name="familyname" value="' . $order["usr_familyname"] .'">
                     </td>
                 </tr>
                 <tr>
                     <th>Email</th>
                     <td>
-                        <input type="email" name="email" value="' . $order["usr_email"] . '">
+                        <input class="form-control" type="email" name="email" value="' . $order["usr_email"] . '">
                     </td>
                 </tr>
                 <tr>
                     <th>Status</th>
                     <td>
-                    <select name="status">
+                    <select class="form-select" name="status">
                     <option disabled value="">Please select one</option>
                     <option value=-1';
                     echo ($order["order_status"] == -1) ? ' selected' : '';
@@ -346,77 +349,94 @@
                 </tr>
                 <tr>
                     <th>Unsere Notizen</th>
-                    <td><textarea name="message" rows="10" cols="30">' . $order["cpl_comment"] . '</textarea></td>
+                    <td><textarea class="form-control" name="message" rows="5" cols="30">' . $order["cpl_comment"] . '</textarea></td>
                 </tr>
             </table>
-            <button class="button" type="Submit" name="auftrag"
+            <button class="btn btn-primary mb-3" type="Submit" name="auftrag"
             value="' . $order["ordernumber"] . '">Speichern</button><br>
         </form>
 
             '; 
+       
+
+        echo '<section class="col">';
         if ($order["order_status"] == 6) {
-            echo '<button class="button">Kunde jetzt informieren</button>';
+            echo '<button class="btn btn-primary mb-3">Kunde jetzt informieren</button><br>';
             // Then set status to 7
             // Then send email
             }
+        echo ' <a class="btn btn-primary mb-3" href="index.php" role="button">Zurück</a>
+        </section>';
                 
     echo '<h2 class="">Auftrag Details:</h2>
     </section>';
+    echo '</div>';
+    echo '<div class="row g-2">';
     echo '
-        <section id="quell">
-            <h3>Quellmedien</h3>
-            <div>';
+        <section class="col" id="quell">
+            <div class="card text-dark bg-light mb-3">
+                <h3 class="card-header">Quellmedien</h3>
+                <div class="card-body p-3">';
     echo $order["quellmedien"];
-    echo '</div>
+    echo '      </div>
+            </div>
         </section>
-        <section id="ziel">
-            <h3>Zielmedien</h3>
-            <div>';
+        <section class="col" id="ziel">
+            <div class="card text-dark bg-light mb-3">
+                <h3 class="card-header">Zielmedien</h3>
+                <div class="p-3">';
     echo $order["zielmedien"];
-    echo '</div>
+    echo '      </div>
+            </div>
         </section>
     ';
-
+    echo '</div>';
+    echo '<div class="row g-2">';
     echo 
     '
-    <section class="" id="sonstiges">
-        <h2 class="">Sonstiges:</h2>
-        <section class="">';
+    <section class="col">
+        <div class="card text-dark bg-light mb-3" id="sonstiges">
+            <h3 class="card-header">Sonstiges</h3>
+            <div class="card-body p-3">';
 
             if ($order["confirmedTrash"] == 1) {
-                echo '<p>Medien nach den Digitalisierung entsorgen</p>';
+                echo '<p class="card-text">Medien nach den Digitalisierung entsorgen</p>';
             }
-            echo '<p>Notizen von Kunde:</p>';
+            echo '<h4 class="card-title">Notizen von Kunde:</h4>';
 
             if ($order["usr_comment"] != '') {
-                echo '<p>' . $order["usr_comment"] . '</p>';
+                echo '<p class="card-text"><i>' . $order["usr_comment"] . '</i></p>';
             } else {
-                echo '<p><i>Keine</i></p>';
+                echo '<p class="card-text"><i>Keine</i></p>';
             }
 
     echo '   
-        </section>
-        <section>
-            <button class="button"><a href="index.php">Zurück</a></button><br>
-        </section>
+            </div>
+           
+        </div>
     </section>';
     
+    // echo '</div>';
     /* Code to display customers address */
+    // echo '<div class="row g-2">';
     echo '
-    <section id="address">
-        <h2 class="">Adresse:</h2>  
-        <address>';
-    echo $order["usr_givenname"] . ' ';
-    echo $order["usr_familyname"] . '<br>'; 
-    if (!empty($order["usr_company"])) {
-        echo $order["usr_company"] . '<br>';
-    }
-    echo $order["usr_street"] . '<br>';
-    echo $order["usr_zip"] . ' ' . $order["usr_city"] . '<br>';
-    echo $order["usr_country"] . '<br>';
-    echo $order["usr_phone"] . '<br>' . $order["usr_email"] .
-        '</address>
+    <section class="col" id="address">
+        <div class="card text-dark bg-light mb-3">
+            <h3 class="card-header">Adresse</h3>  
+            <address class=card-body p-3>';
+                echo $order["usr_givenname"] . ' ';
+                echo $order["usr_familyname"] . '<br>'; 
+                if (!empty($order["usr_company"])) {
+                    echo $order["usr_company"] . '<br>';
+                }
+                echo $order["usr_street"] . '<br>';
+                echo $order["usr_zip"] . ' ' . $order["usr_city"] . '<br>';
+                echo $order["usr_country"] . '<br>';
+                echo $order["usr_phone"] . '<br>' . $order["usr_email"] .
+            '</address>
+        </div>
     </section> ';
+    echo '</div>';
 
     /* Code to create Media title tables for each mediatype */
 
@@ -433,8 +453,9 @@
     $tonband = array();
     $lp = array();
     $single = array();
+    echo '<div class="row g-2">';
 
-    echo '<section id="media">';
+    echo '<section class="col" id="media">';
 
     if (!empty($mediatitles)) {
         echo '<h2 class="">Media Titel:</h2>';
@@ -487,9 +508,9 @@
     function createMediaTable($arr)
     {
         if (!empty($arr)) {
-            echo '<table>
+            echo '<table class="table table-striped caption-top table-bordered table-sm">
                 <caption>' . strtoupper($arr[0]["mediatype"]) . '</caption>
-                <thead>
+                <thead class="table-dark">
                     <tr>
                         <th>Title Now</th>
                         <th>Title New</th>
@@ -525,7 +546,9 @@
     createMediaTable($single);
 
     echo '</section>';
+    echo '</div>';
 ?>
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
 </html>

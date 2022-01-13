@@ -25,7 +25,7 @@
                     kbScratch, kbCleaning, kbRoc, kbRotate, apsResolution,
                     apsScratch, apsRoc, apsRotate, fotoResolution, fotoScratch,
                     fotoRoc, fotoRotate, wishDvd, countDvd, shellDvd, wishCd,
-                    countCd, shellCd, wishData, destMedium FROM cpl_orders WHERE order_status >= 1 AND order_status <=10;";
+                    countCd, shellCd, wishData, destMedium FROM cpl_orders WHERE order_status >= 1 AND order_status <=10 ORDER BY `order_status` ASC;";
             $result = $connection->query($sql);
             // array that stores data from database query
             $rows = $result->fetchAll(PDO::FETCH_ASSOC);
@@ -306,20 +306,20 @@
         $connection = null;
         // $_SESSION["orders"] = $rows;
         // var_dump($_SESSION["orders"]);
-        echo "<table id='main-table'>
-        <tr>
-        <th>Auftrag</th>
-        <th>Kunde</th>
-        <th>Status</th>
-        <th>Quellmedien</th>
-        <th>Zielmedien</th>
-        <th>Notizen</th>
-        </tr>";
+        echo '<table id="main-table" class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <th>Auftrag</th>
+                <th>Kunde</th>
+                <th>Status</th>
+                <th>Quellmedien</th>
+                <th>Zielmedien</th>
+                <th>Notizen</th>
+            </thead>';
 
         foreach ($rows as $row) {
             echo "<tr>";
             echo '<td><form action="fetch_one_order.php" method="post">
-                <input class="button" type="submit" name="auftrag"
+                <input class="btn btn-outline-dark" type="submit" name="auftrag"
                     value="' . $row['auftrag'] . '"/>
                 </form>' . "</td>";
             echo "<td>" . $row['kunde'] . "</td>";
