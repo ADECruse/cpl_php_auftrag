@@ -16,7 +16,17 @@
         echo "ERROR: Connection failed: " . $e->getMessage();
     }
     try {
-        $stmt = $connection->prepare("SELECT `ordernumber`, `created`, `order_status`, `usr_company`, `usr_givenname`, `usr_familyname`, `usr_street`, `usr_zip`, `usr_city`, `usr_country`, `usr_email`, `usr_phone`, `delivery_company`, `delivery_givenname`, `delivery_familyname`, `delivery_street`, `delivery_zip`, `delivery_city`, `delivery_country`, `usr_comment`, `cpl_comment`, `count8mm`, `count16mm`, `countVhs`, `countVhsc`, `countMinidv`, `countMicromv`, `countVideo8`, `countVideo2000`, `countBetamax`, `countMc`, `countTonband`, `countLp`, `countSingle`, `countDia`, `countKb`, `countAps`, `countFoto`, `countDvd`, `countCd`, `destMedium`, `wishData`, `wishDvd`, `wishCd`, `shellDvd`, `shellCd`, `super8resolution`, `lpCleaning`, `singleCleaning`, `diaResolution`, `diaNumbering`, `diaCleaning`, `diaScratch`, `diaRoc`, `diaRotate`, `diaSlidechange`, `kbResolution`, `kbNumbering`, `kbCleaning`, `kbScratch`, `kbRoc`, `kbRotate`, `apsResolution`, `apsNumbering`, `apsScratch`, `apsRoc`, `apsRotate`, `fotoResolution`, `fotoNumbering`, `fotoRoc`, `fotoRotate`, `fotoScratch`, `confirmedTrash`, '' AS quellmedien, '' AS zielmedien FROM cpl_orders WHERE ordernumber = ?");
+        $stmt = $connection->prepare("SELECT ordernumber, order_status, usr_givenname, usr_familyname, usr_company, usr_street, usr_zip, usr_city, usr_country, usr_email, usr_phone, '' AS quellmedien, '' AS zielmedien,
+        usr_comment, cpl_comment, count8mm, count16mm, countVhs, countVhsc,
+        countVideo8, countMinidv, countMicromv, countVideo2000,
+        countBetamax, countMc, countTonband, countLp, countSingle,
+        countDia, countKb, countAps, countFoto, super8resolution,
+        lpCleaning, singleCleaning, diaResolution, diaScratch,
+        diaCleaning, diaRoc, diaRotate, diaSlidechange, kbResolution,
+        kbScratch, kbCleaning, kbRoc, kbRotate, apsResolution,
+        apsScratch, apsRoc, apsRotate, fotoResolution, fotoScratch,
+        fotoRoc, fotoRotate, wishDvd, countDvd, shellDvd, wishCd,
+        countCd, shellCd, wishData, destMedium, confirmedTrash FROM cpl_orders WHERE ordernumber = ?");
         $stmt->execute([$auftrag]);
         $order = $stmt->fetch(PDO::FETCH_ASSOC);
         // echo $auftrag;
@@ -227,21 +237,22 @@
             }
             
             // remove columns when no longer necessary
-            if (preg_match("/count/", $col)) {
-                unset($order[$col]);
-            }
+            // if (preg_match("/count/", $col)) {
+            //     unset($order[$col]);
+            // }
                   
         }
-        unset($order["super8resolution"], $order["lpCleaning"], $order["singleCleaning"], 
-                $order["diaResolution"], $order["diaScratch"], $order["diaCleaning"], 
-                $order["diaRoc"], $order["diaRotate"], $order["diaSlidechange"], 
-                $order["kbResolution"], $order["kbScratch"], $order["kbCleaning"], 
-                $order["kbRoc"], $order["kbRotate"], $order["apsResolution"], 
-                $order["apsScratch"], $order["apsRoc"], $order["apsRotate"], 
-                $order["fotoResolution"], $order["fotoScratch"], $order["fotoRoc"], 
-                $order["fotoRotate"], $order["wishDvd"], $order["countDvd"], 
-                $order["shellDvd"], $order["wishCd"], $order["countCd"], $order["shellCd"], 
-                $order["wishData"], $order["destMedium"]);
+        // unset($order["super8resolution"], $order["lpCleaning"], $order["singleCleaning"], 
+        //         $order["diaResolution"], $order["diaScratch"], $order["diaCleaning"], 
+        //         $order["diaRoc"], $order["diaRotate"], $order["diaSlidechange"], 
+        //         $order["kbResolution"], $order["kbScratch"], $order["kbCleaning"], 
+        //         $order["kbRoc"], $order["kbRotate"], $order["apsResolution"], 
+        //         $order["apsScratch"], $order["apsRoc"], $order["apsRotate"], 
+        //         $order["fotoResolution"], $order["fotoScratch"], $order["fotoRoc"], 
+        //         $order["fotoRotate"], $order["wishDvd"], $order["countDvd"], 
+        //         $order["shellDvd"], $order["wishCd"], $order["countCd"], $order["shellCd"], 
+        //         $order["wishData"], $order["destMedium"]);
+        // print_r($order);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -258,7 +269,8 @@
         <header id="order-header">
             <h1>Auftrag</h1>
         </header>
-<?php    
+<?php
+    
     echo '
     <section id="details-form">
         <form  action="update_order.php" method="post">
@@ -376,8 +388,8 @@
             }
             echo '<p>Notizen von Kunde:</p>';
 
-            if ($order["comment"] != '') {
-                echo '<p>' . $order["comment"] . '</p>';
+            if ($order["usr_comment"] != '') {
+                echo '<p>' . $order["usr_comment"] . '</p>';
             } else {
                 echo '<p><i>Keine</i></p>';
             }
