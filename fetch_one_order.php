@@ -47,8 +47,6 @@
 
     //print_r($order);
     // print_r($mediatitles);
-    // var_dump($_SESSION["orders"]);
-    //echo isset($_SESSION["orders"]);
 
     function GetShell($arg) {
         $huelle = "";
@@ -234,24 +232,9 @@
             $destMedium = $order["destMedium"];
             if ($col == "wishData" && $col_value == 1) {
                 $order["zielmedien"] = $order["zielmedien"] . "<p><b>Gewünscht: Daten auf $destMedium</b></p>";
-            }
-            
-            // remove columns when no longer necessary
-            // if (preg_match("/count/", $col)) {
-            //     unset($order[$col]);
-            // }
-                  
+            }                 
         }
-        // unset($order["super8resolution"], $order["lpCleaning"], $order["singleCleaning"], 
-        //         $order["diaResolution"], $order["diaScratch"], $order["diaCleaning"], 
-        //         $order["diaRoc"], $order["diaRotate"], $order["diaSlidechange"], 
-        //         $order["kbResolution"], $order["kbScratch"], $order["kbCleaning"], 
-        //         $order["kbRoc"], $order["kbRotate"], $order["apsResolution"], 
-        //         $order["apsScratch"], $order["apsRoc"], $order["apsRotate"], 
-        //         $order["fotoResolution"], $order["fotoScratch"], $order["fotoRoc"], 
-        //         $order["fotoRotate"], $order["wishDvd"], $order["countDvd"], 
-        //         $order["shellDvd"], $order["wishCd"], $order["countCd"], $order["shellCd"], 
-        //         $order["wishData"], $order["destMedium"]);
+        
         // print_r($order);
 ?>
 <!DOCTYPE html>
@@ -261,8 +244,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <!-- <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/style.css"> -->
     <title><?php echo $auftrag; ?></title>
 </head>
 <body>
@@ -371,6 +352,8 @@
     echo '<h2 class="">Auftrag Details:</h2>
     </section>';
     echo '</div>';
+
+    /* Code to display quell und ziel medien*/
     echo '<div class="row g-2">';
     echo '
         <section class="col" id="quell">
@@ -381,6 +364,7 @@
     echo '      </div>
             </div>
         </section>
+    
         <section class="col" id="ziel">
             <div class="card text-dark bg-light mb-3">
                 <h3 class="card-header">Zielmedien</h3>
@@ -416,9 +400,7 @@
         </div>
     </section>';
     
-    // echo '</div>';
     /* Code to display customers address */
-    // echo '<div class="row g-2">';
     echo '
     <section class="col" id="address">
         <div class="card text-dark bg-light mb-3">

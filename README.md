@@ -1,11 +1,21 @@
-# cpl_php_auftrag
-Copylab Auftrag nur mit PHP/HTML5/CSS
+# Copylab Order System / Auftrag System
 
-to-do:
+The goal of this project is to create an order viewing system for [Copylab](https://copylab.de) employees.
+Built using PHP, HTML5 and using the Bootstrap CDN for CSS styling. 
 
-- combine update_order.php with index.php 
-- add logic to update status after customer email sent
-- sort the main table by status
+Der ziel von des Projekt ist ein Auftrag system für [Copylab](https://copylab.de) Angestellte erstellen.
+Gebaut mit PHP, HTML5 und Bootstrap CDN für das CSS Styling.
+
+## Features / Merkmale
+
+* Display a list all active orders, sorted by status 
+* Display the order number, customer name, current status, source media, goal media and comments of each order
+* Display a detailed page of an order once it has been clicked on at the main order list
+* Ability to update the relevant data for each order, including updating the current status of order
+* Email the customer once the order status meets a certain threshold.
 
 
-SELECT `ordernumber`, `created`, `order_status`, `usr_company`, `usr_givenname`, `usr_familyname`, `usr_street`, `usr_zip`, `usr_city`, `usr_country`, `usr_email`, `usr_phone`, `delivery_company`, `delivery_givenname`, `delivery_familyname`, `delivery_street`, `delivery_zip`, `delivery_city`, `delivery_country`, `usr_comment`, `cpl_comment`, `count8mm`, `count16mm`, `countVhs`, `countVhsc`, `countMinidv`, `countMicromv`, `countVideo8`, `countVideo2000`, `countBetamax`, `countMc`, `countTonband`, `countLp`, `countSingle`, `countDia`, `countKb`, `countAps`, `countFoto`, `countDvd`, `countCd`, `destMedium`, `wishData`, `wishDvd`, `wishCd`, `shellDvd`, `shellCd`, `super8resolution`, `lpCleaning`, `singleCleaning`, `diaResolution`, `diaNumbering`, `diaCleaning`, `diaScratch`, `diaRoc`, `diaRotate`, `diaSlidechange`, `kbResolution`, `kbNumbering`, `kbCleaning`, `kbScratch`, `kbRoc`, `kbRotate`, `apsResolution`, `apsNumbering`, `apsScratch`, `apsRoc`, `apsRotate`, `fotoResolution`, `fotoNumbering`, `fotoRoc`, `fotoRotate`, `fotoScratch`, `confirmedTrash`, '' AS quellmedien, '' AS zielmedien FROM cpl_orders WHERE ordernumber = ?
+## To-Do
+
+* Add PHPMailer
+* Add code to update status after customer email sent

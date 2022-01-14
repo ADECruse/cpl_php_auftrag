@@ -95,9 +95,8 @@
             return $status;
         }
         // code that takes all results from "count" columns and combine them into one named "quellmedien"
-        $orders = [];
         $value = "";
-        // foreach loop modifies the original $rows array using references, later I want to change this into an array_map function for speed and simplicity
+        // foreach loop modifies the original $rows array using references
         $clean = "Klangverbesserung: Nassreinigung";
         foreach ($rows as &$row) {
             $row["quellmedien"] = $value;
@@ -250,20 +249,7 @@
                             break;                
                     }
                 }
-                // $getShell = $row["shellDvd"];
-                // if ($getShell == "cardboard") {
-                //     $huelle = "Kartontasche";
-                // } elseif ($getShell == "roundmetal") {
-                //     $huelle = "Metalldose rund";
-                // } elseif ($getShell == "rectmetal") {
-                //     $huelle = "Metallbox eckig";
-                // } else {
-                //     $huelle = "Papierhülle";
-                // }
-                //Hülle: Papierhülle (kostenlos) (shellDvd==paper)
-                //Kartontasche (shellDvd==cardboard)
-                //Metalldose rund (shellDvd==roundmetal)
-                //Metallbox eckig (shellDvd==rectmetal)
+                
                 $countDvd = "";
                 if ($col == "wishDvd" && $col_value == 1) {
                     if ($row["countDvd"] > 0) {
@@ -282,53 +268,35 @@
                 $destMedium = $row["destMedium"];
                 if ($col == "wishData" && $col_value == 1) {
                     $row["zielmedien"] = $row["zielmedien"] . "<p><b>Gewünscht: Daten auf $destMedium</b></p>";
-                }
-                
-                // remove columns when no longer necessary
-                if (preg_match("/count/", $col)) {
-                    unset($row[$col]);
-                }
-                      
+                }    
             }
-            unset($row["super8resolution"], $row["lpCleaning"], $row["singleCleaning"], 
-                    $row["diaResolution"], $row["diaScratch"], $row["diaCleaning"], 
-                    $row["diaRoc"], $row["diaRotate"], $row["diaSlidechange"], 
-                    $row["kbResolution"], $row["kbScratch"], $row["kbCleaning"], 
-                    $row["kbRoc"], $row["kbRotate"], $row["apsResolution"], 
-                    $row["apsScratch"], $row["apsRoc"], $row["apsRotate"], 
-                    $row["fotoResolution"], $row["fotoScratch"], $row["fotoRoc"], 
-                    $row["fotoRotate"], $row["wishDvd"], $row["countDvd"], 
-                    $row["shellDvd"], $row["wishCd"], $row["countCd"], $row["shellCd"], 
-                    $row["wishData"], $row["destMedium"]);
-        };
-        
+        };   
         
         $connection = null;
-        // $_SESSION["orders"] = $rows;
-        // var_dump($_SESSION["orders"]);
+        // print_r($rows);
         echo '<table id="main-table" class="table table-striped table-bordered">
-            <thead class="table-dark">
-                <th>Auftrag</th>
-                <th>Kunde</th>
-                <th>Status</th>
-                <th>Quellmedien</th>
-                <th>Zielmedien</th>
-                <th>Notizen</th>
-            </thead>';
+                <thead class="table-dark">
+                    <th>Auftrag</th>
+                    <th>Kunde</th>
+                    <th>Status</th>
+                    <th>Quellmedien</th>
+                    <th>Zielmedien</th>
+                    <th>Notizen</th>
+                </thead>';
 
-        foreach ($rows as $row) {
+        foreach ($rows as $row2) {
             echo "<tr>";
             echo '<td><form action="fetch_one_order.php" method="post">
-                <input class="btn btn-outline-dark" type="submit" name="auftrag"
-                    value="' . $row['auftrag'] . '"/>
-                </form>' . "</td>";
-            echo "<td>" . $row['kunde'] . "</td>";
-            echo "<td>" . $row['status'] . "</td>";
-            echo "<td>" . $row['quellmedien'] . "</td>";
-            echo "<td>" . $row['zielmedien'] . "</td>";
-            echo "<td>" . $row['notizen'] . "</td>";
+                    <input class="btn btn-outline-dark" type="submit" name="auftrag"
+                        value="' . $row2['auftrag'] . '"/>
+                    </form>' . "</td>";
+            echo "<td>" . $row2['kunde'] . "</td>";
+            echo "<td>" . $row2['status'] . "</td>";
+            echo "<td>" . $row2['quellmedien'] . "</td>";
+            echo "<td>" . $row2['zielmedien'] . "</td>";
+            echo "<td>" . $row2['notizen'] . "</td>";
             echo "</tr>";
         }
-
         echo "</table>";
+
     ?>
